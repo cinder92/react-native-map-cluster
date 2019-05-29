@@ -99,12 +99,19 @@ export default class MapWithClustering extends Component {
     });
   };
 
-  calculateBBox = region => [
-    region.longitude - region.longitudeDelta, // westLng - min lng
-    region.latitude - region.latitudeDelta, // southLat - min lat
-    region.longitude + region.longitudeDelta , // eastLng - max lng
-    region.latitude + region.latitudeDelta// northLat - max lat
-  ];
+  calculateBBox = region => {
+    let lngD;
+    if(region.longitudeDelta < 0)
+        lngD = region.longitudeDelta + 360
+    else
+        lngD = region.longitudeDelta;     
+    return([
+        region.longitude - lngD, // westLng - min lng
+        region.latitude - region.latitudeDelta, // southLat - min lat
+        region.longitude + lngD, // eastLng - max lng
+        region.latitude + region.latitudeDelta // northLat - max lat
+    ])
+  };
 
   getBoundsZoomLevel = (bounds, mapDim) => {
     const WORLD_DIM = { height: mapDim.height, width: mapDim.width };
